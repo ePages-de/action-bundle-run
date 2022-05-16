@@ -1,0 +1,28 @@
+name: Run Ruby
+description: Install Bundle gems and run commands.
+author: Alket Tarko <atarko@epages.com>, Roberto Welzel Filho <rwelzel@epages.com>, Unai Abrisketa <uabrisketa@epages.com>
+
+inputs:
+  ruby_version:
+    description: The Ruby version to be used. Defaults to `3.1.2`.
+    required: true
+    default: '3.1.2'
+  bundle_github__com:
+    description: The GitHub access token.
+    required: false
+  cmd:
+    description: The command to be executed.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v2
+    - uses: ruby/setup-ruby@v1
+      env:
+        BUNDLE_GITHUB__COM: ${{ inputs.bundle_github__com }}
+      with:
+        ruby-version: ${{ inputs.ruby_version }}
+        bundler-cache: true
+    - shell: bash
+      run: ${{ inputs.cmd }}
